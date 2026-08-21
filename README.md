@@ -1,41 +1,34 @@
-# default-workspace-template
+# Thread Writer
 
-A self-contained template for running a persistent Claude agent that delegates work to sub-agents and can manage its own background services.
+A multi-voice, multi-format generator that turns blog posts, links, or bullet points into X threads and LinkedIn posts, with a schedule queue and a cached voice-corpus mechanism.
 
-## Usage
+Thread Writer is a small Flask web app -- a Typefully-style reader -- that turns
+a source into ready-to-post social copy. Feed it one of your own blog posts, any
+trending link you paste in, or a few bullet points, and it drafts the copy in
+your choice of three voices (Normies, Researchers, Quotes) and three formats (a
+single Tweet, a Thread of tweets, or a long-form LinkedIn post), with one-click
+Generate and Regenerate for any voice-and-format combination. A Schedule view
+tracks what is due to post next on a recommended cadence and shows a calendar of
+what has already gone out. Publishing never auto-posts: it copies the text and
+opens X's or LinkedIn's composer so you review and send it yourself. Each voice
+is grounded in a large corpus of real example writing, sent to the model as a
+cached prompt prefix so drafts imitate a genuine register rather than a
+one-line description of one.
 
-```bash
-mngr create my-workspace main -t local \
-    --host-env MINDS_WORKSPACE_NAME=my-workspace \
-    --project ~/project/default-workspace-template
-```
+This repository is a published **minds inspiration**: a clean, bootable
+snapshot of the apps and features a mind built, ready to adapt into your own.
+It is NOT the generic workspace template -- it is this specific project.
 
-## Structure
+## Use it
 
-- `CLAUDE.md` - Agent instructions
-- `parent.toml` - Upstream repo for pulling updates
-- `.mngr/settings.toml` - Agent types, create templates, command defaults
-- `skills/` - Agent skills (task delegation, services, self-update)
-- `scripts/` - Utility scripts (reviewer settings)
-- `event-processor/` - Pre-configured directory for creating persistent sub-agents
-- `supervisord.conf` - Supervisord config defining the background services
-- `libs/bootstrap/` - First-boot setup, then launches supervisord to supervise the services
-- `vendor/mngr/` - A vendored, mutable copy of mngr. Note that making changes here *will* affect the behavior of the `mngr` command
-- `vendor/tk/` - A vendored copy of the [tk](https://github.com/wedow/ticket) ticket tracker. The `ticket` script (also callable as `tk`) manages tickets stored as markdown. We point `TICKETS_DIR` at `runtime/tickets/` (set in `.mngr/settings.toml`'s `host_env`) so tickets live alongside the rest of `runtime/` (and are covered by the opt-in GitHub sync when the `github-sync` skill has enabled it).
+- **Create a new mind from it:** point a new minds workspace at this repo's
+  URL. On first boot the mind reads the inspiration and helps you connect your
+  own accounts and adapt it.
+- **Bring it into an existing mind:** run `/use-inspiration <this repo's URL>`.
 
-## Create templates
+## What's inside
 
-- `worker` - For sub-agents created via the launch-task skill (includes code review)
-- `subskill-worker` - Sub-agent for any flow that hands its worker the generic harden worker (the crystallize / update / heal artifact lifecycle, including the update-system-interface flow). Inherits from `worker` and pre-installs the single generic worker from `.agents/shared/worker/` into its own `.agents/skills/` as `harden-worker`.
+- **Thread Writer** -- [`inspiration-thread-writer.md`](inspiration-thread-writer.md) (published now)
 
-## Artifact harden lifecycle
-
-The main agent can promote ad-hoc work into reusable artifacts, fix artifacts that fail, and extend artifacts that came up short -- across skills, web services, and the system interface. The user-invokable surface is three generic operation leads (main agent side), each parameterized by the artifact:
-
-- `crystallize-artifact` - Create a new artifact (default: a skill reconstructed from the just-finished turn). Invoked directly post-turn, or by the live-half wrappers (`build-web-service`, `fetch-process-show`) once a prototype is confirmed.
-- `heal-artifact` - Fix a skill or service that errored or produced wrong results.
-- `update-artifact` - Extend / refactor / verify a skill, service, or shared reference; one flow with a committed-vs-emergent design-gate toggle.
-
-Each lead spawns a `subskill-worker` sub-agent that runs the single generic `harden-worker` sub-skill. The worker reads the operation and artifact from its task file and composes the universal `harden-artifact.md` contract with one `op-*.md` and one `artifact-*.md` reference under `.agents/shared/worker/references/`. Workers commit to `mngr/<task-name>` branches; main merges on user approval. (The same template also backs the `update-system-interface` flow, which wraps `update-artifact` with `artifact=system-interface` and adds its preview / safe-reveal go-live.)
-
-Crystallized skills are marked with `metadata.crystallized: true` in their SKILL.md frontmatter and follow the [agentskills.io](https://agentskills.io/specification) layout (`scripts/run.py` as a PEP 723 script, companion SKILL.md, optional `references/` and `assets/`).
+Each `inspiration-<slug>.md` is the full manifest for that inspiration: what
+it is, how it works, the prerequisites it needs, and how to adapt it.

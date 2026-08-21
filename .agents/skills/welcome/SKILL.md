@@ -1,43 +1,38 @@
 ---
 name: welcome
-description: Greet the user with a short, friendly welcome message when a new project/agent is first started. Invoked automatically as the first message from the minds desktop client.
+description: Greet the user when a new project starts. This mind was created from the "Thread Writer" inspiration, so the welcome introduces that inspiration and immediately starts the adaptation conversation.
 ---
 
-# Welcome the user
+# Welcome the user (inspiration: Thread Writer)
 
-This skill has two parts: the opening greeting you always send first, and a list of suggestions you offer only if the user asks for ideas.
+This mind was created from an inspiration -- a published snapshot of apps
+another mind built:
 
-## Opening message
+- Title: Thread Writer
+- Slug: `thread-writer`
+- Description: A multi-voice, multi-format generator that turns blog posts, links, or bullet points into X threads and LinkedIn posts, with a schedule queue and a cached voice-corpus mechanism.
+- Manifest: `inspiration-thread-writer.md` (at the repo root)
 
-Output the following welcome message to the user, verbatim, as your entire response. Do NOT call any tools, do NOT look at the codebase, and do NOT add anything else:
+Do ALL of the following in your FIRST response, in the same turn, without
+waiting to be asked:
 
----
+1. Open with a short CUSTOM welcome that names **Thread Writer** and gives the
+   one-line description above. Do NOT use a generic "Welcome to Minds"
+   greeting and do NOT offer a generic suggestions list.
+2. Immediately read `inspiration-thread-writer.md` at the repo root (reading the
+   manifest in the first turn is required).
+3. In plain, non-technical language, present what the inspiration is and
+   what it needs from the user -- name the manifest's "Prerequisites" (the
+   connectors/permissions it runs on). Then ask whether they want to hook it
+   up to their own accounts now (e.g. "Want me to connect this to your own
+   Slack?"). End your first response on THAT question. This is the
+   `use-inspiration` skill's template path; the manifest's "How to adapt
+   it" section is the full script: if they say yes, ACTIVATE FIRST -- initiate
+   each `requires_permission` via a latchkey permission request, get the
+   app showing THEIR OWN DATA (that is the definition of working; a running
+   service is not), invite them to take a look -- and only then ask how they
+   want to adapt it.
 
-### Welcome to Minds
-
-I'm an AI operating system built to extend *you* — so you can do your best work.
-
-I can take on tasks for you, build custom AI tools you can easily edit, connect to the tools you already use to pull in information, or just brainstorm ways to make your work better.
-
-**Let's get started**
-
-Already have something in mind? Tell me what you'd like to work on below. If not, I'm happy to suggest a few ways to get started.
-
----
-
-That is the entire opening message. Stop after printing it.
-
-## If the user asks for suggestions
-
-After the opening message the user replies. If their reply asks for suggestions, says they're not sure, or otherwise signals they don't have something specific in mind, output the following message to the user, verbatim, and nothing else. (If instead they describe something they want to do, ignore this section and help them with that directly.)
-
----
-
-Here are some popular ways people get started with Minds. Pick whichever fits, and we can build on it as a starting point.
-
-1. **Unify your email & messages:** Bring every conversation into one place and respond from there.
-2. **Organize your tasks:** Build a system to track what you need to do and get it done.
-3. **Track your team's work:** A dashboard for everything across GitHub, Linear, Slack, and email.
-4. **Keep up with what you care about:** Stay current on the products, events, or news that matter to you.
-
----
+If this repo has accumulated several `inspiration-*.md` manifests, the one
+named above is the latest; treat the others as reference (they were likely
+already adapted upstream).

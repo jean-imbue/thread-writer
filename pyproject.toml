@@ -15,6 +15,7 @@ dependencies = [
     "playwright==1.58.0",
     "litellm>=1.88.1",
     "browser",
+    "thread-writer",
 ]
 
 [dependency-groups]
@@ -54,7 +55,7 @@ package = false
 override-dependencies = ["openai>=2.20.0"]
 
 [tool.uv.workspace]
-members = ["libs/bootstrap", "libs/cloudflare_tunnel", "libs/app_watcher", "libs/github_sync", "libs/host_backup", "libs/mngr_cli_contract", "libs/tk_command_parsing", "libs/oom_priority", "apps/system_interface", "libs/browser"]
+members = ["libs/bootstrap", "libs/cloudflare_tunnel", "libs/app_watcher", "libs/github_sync", "libs/host_backup", "libs/mngr_cli_contract", "libs/tk_command_parsing", "libs/oom_priority", "apps/system_interface", "libs/browser", "libs/thread_writer"]
 
 [tool.uv.sources]
 bootstrap = { workspace = true }
@@ -71,6 +72,7 @@ imbue-mngr = { path = "vendor/mngr/libs/mngr", editable = true }
 imbue-mngr-claude = { path = "vendor/mngr/libs/mngr_claude", editable = true }
 resource-guards = { path = "vendor/mngr/libs/resource_guards", editable = true }
 concurrency-group = { path = "vendor/mngr/libs/concurrency_group", editable = true }
+thread-writer = {workspace = true}
 
 [tool.pytest.ini_options]
 testpaths = ["."]
